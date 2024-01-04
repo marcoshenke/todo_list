@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
-import './App.css';
+import './App.css'
 
 class App extends Component {
-    constructor(props) {
-      super(props);
-      this.state = { apiResponse: "" };
-    }
+  constructor(props) {
+    super(props)
+    this.state = { apiResponse: '' }
+  }
 
-    callAPI() {
-        fetch("http://localhost:9000/testAPI")
-            .then(res => res.text())
-            .then(res => this.setState({ apiResponse: res }))
-            .catch(err => err)
-    }
+  callAPI() {
+    fetch('http://localhost:9000/testAPI')
+      .then((res) => res.text())
+      .then((res) => this.setState({ apiResponse: res }))
+      .catch((err) => err)
+  }
 
-    componentDidMount() {
-        this.callAPI();
-    }
+  componentDidMount() {
+    this.callAPI()
+  }
 
   render() {
     return (
@@ -25,7 +25,6 @@ class App extends Component {
       </div>
     )
   }
-  
 }
 
-export default App;
+export default App
