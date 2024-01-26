@@ -1,16 +1,31 @@
-import { expressConfig } from './config/expressConfig.js'
-import { Routes as routes } from './src/Routes/Routes.js'
+require('dotenv').config()
+const express = require('express')
+const bodyParser = require('body-parser')
+const consign = require('consign')
+const mongoose = require('mongoose')
 
-export const server = () => {
-  const app = expressConfig()
-  const port = app.get('port')
+const app = express()
 
-  // RODANDO NOSSA APLICAÇÃO NA PORTA SETADA
-  app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`)
+mongoose
+  .connect(process.env.CONNECTIONSTRING) // CONNECTIONSTRING está vindo de um arquivo .env que nao esta sendo enviado para o repositório
+  .then(() => {
+    console.log('Conectado a base de dados')
+    app.emit('dbOk')
   })
+  .catch((e) => console.error(e))
 
-  app.use(routes)
-}
+// MIDDLEWARES
+app.use(bodyParser.json())
 
-server()
+consign({ cwd: 'src' })
+  .include('Models')
+  .then('Controllers')
+  .then('Middlewares')
+  .then('Routes')
+  .into(app)
+
+app.on('dbOk', () => {
+  app.listen(9000, () => {
+    console.log(`Servidor rodando na porta 9000`)
+  })
+})
