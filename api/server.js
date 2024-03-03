@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
-const consign = require('consign')
 const mongoose = require('mongoose')
 
 const app = express()
@@ -16,13 +15,6 @@ mongoose
 
 // MIDDLEWARES
 app.use(bodyParser.json())
-
-consign({ cwd: 'src' })
-  .include('Models')
-  .then('Controllers')
-  .then('Middlewares')
-  .then('Routes')
-  .into(app)
 
 app.on('dbOk', () => {
   app.listen(9000, () => {
